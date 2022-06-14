@@ -1,0 +1,625 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "<p align=\"center\">\n<img src=\"https://github.com/chihebchebbi/MS_Sentinel_CALDERA/blob/main/Images/Caldera_Logo.png?raw=true\" alt=\"logo\" style=\"width:1400px\"></a>\n</p>\n# CALDERA Automated Adversary Emulation Platform\n---\nCALDERA™ is a cybersecurity framework developed by MITRE that empowers cyber practitioners to save time, money, and energy through automated security assessments.\n\n"
+      },
+      "name": "text - 2"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "ce4a1417-b647-4708-9bdc-02712c78c810",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeRange",
+            "type": 4,
+            "isRequired": true,
+            "value": {
+              "durationMs": 259200000
+            },
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 300000
+                },
+                {
+                  "durationMs": 900000
+                },
+                {
+                  "durationMs": 1800000
+                },
+                {
+                  "durationMs": 3600000
+                },
+                {
+                  "durationMs": 14400000
+                },
+                {
+                  "durationMs": 43200000
+                },
+                {
+                  "durationMs": 86400000
+                },
+                {
+                  "durationMs": 172800000
+                },
+                {
+                  "durationMs": 259200000
+                },
+                {
+                  "durationMs": 604800000
+                },
+                {
+                  "durationMs": 1209600000
+                },
+                {
+                  "durationMs": 2419200000
+                },
+                {
+                  "durationMs": 2592000000
+                },
+                {
+                  "durationMs": 5184000000
+                },
+                {
+                  "durationMs": 7776000000
+                }
+              ],
+              "allowCustom": true
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            }
+          }
+        ],
+        "style": "pills",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "name": "parameters - 14"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Agents_CL \n| extend ID = tostring(paw_s), Group = tostring(group_s), Architecture = tostring(architecture_s),\nUsername = tostring(username_s), Contact = tostring(contact_s), Executors = tostring(executors_s),\nPlatform = tostring(platform_s), Created = tostring(created_t), Host = tostring(host_s), LastSeen = tostring(last_seen_t), IP = tostring(host_ip_addrs_s)\n| summarize count() by Host, Architecture, Platform,Group,Username ,IP,Contact,Executors, Created, LastSeen\n| project-away count_",
+        "size": 3,
+        "title": "CALDERA AGENTS",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "Group",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": "==",
+                    "thresholdValue": "blue",
+                    "representation": "blue"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "red",
+                    "representation": "redBright",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "blue",
+                    "text": "{0}{1}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "customWidth": "100",
+      "name": "query - 1"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Agents_CL \n| extend ID = tostring(paw_s), Group = tostring(group_s), Architecture = tostring(architecture_s),\nUsername = tostring(username_s), Contact = tostring(contact_s), Executors = tostring(executors_s),\nPlatform = tostring(platform_s), Created = tostring(created_t), Host = tostring(host_s), LastSeen = tostring(last_seen_t), IP = tostring(host_ip_addrs_s)\n| summarize dcount(Host) by Platform",
+        "size": 3,
+        "title": "AGENT BY PLATFORM",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "piechart",
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "windows",
+              "label": "Windows",
+              "color": "blueDark"
+            },
+            {
+              "seriesName": "linux",
+              "label": "Linux",
+              "color": "redBright"
+            }
+          ]
+        }
+      },
+      "customWidth": "30",
+      "name": "query - 2"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Agents_CL \n| extend ID = tostring(paw_s), Group = tostring(group_s), Architecture = tostring(architecture_s),\nUsername = tostring(username_s), Contact = tostring(contact_s), Executors = tostring(executors_s),\nPlatform = tostring(platform_s), Created = tostring(created_t), Host = tostring(host_s), LastSeen = tostring(last_seen_t), IP = tostring(host_ip_addrs_s)\n//| project ID, Host, Architecture, Platform,Group,Username ,IP,Contact,Executors, Created, LastSeen\n| summarize dcount(Host) by Contact",
+        "size": 3,
+        "title": "AGENT BY CONTACT",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "piechart",
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "HTTP",
+              "color": "blueDarkDark"
+            }
+          ]
+        }
+      },
+      "customWidth": "30",
+      "name": "query - 2 - Copy"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Agents_CL \n| extend ID = tostring(paw_s), Group = tostring(group_s), Architecture = tostring(architecture_s),\nUsername = tostring(username_s), Contact = tostring(contact_s), Executors = tostring(executors_s),\nPlatform = tostring(platform_s), Created = tostring(created_t), Host = tostring(host_s), LastSeen = tostring(last_seen_t), IP = tostring(host_ip_addrs_s)\n//| project ID, Host, Architecture, Platform,Group,Username ,IP,Contact,Executors, Created, LastSeen\n| summarize dcount(Host) by Group",
+        "size": 3,
+        "title": "AGENT BY GROUP",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "piechart",
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "red",
+              "label": "Red Agent",
+              "color": "redBright"
+            },
+            {
+              "seriesName": "blue",
+              "color": "blue"
+            }
+          ]
+        }
+      },
+      "customWidth": "30",
+      "name": "query - 3"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Agents_CL \n| where isnotempty(host_s)\n| extend Host = toupper(tostring(host_s))\n| join kind=inner  (\n    SecurityAlert\n| extend Entities = iff(isempty(Entities), todynamic('[{\"dummy\" : \"\"}]'), todynamic(Entities))\n| mv-expand Entities\n//| where Entities has \"HostName\"\n| extend HostEntity =  toupper(tostring(Entities.HostName))\n)\non $left.Host == $right.HostEntity\n//| where isnotempty(Host)\n| project Host, DisplayName,AlertSeverity, Description, ProviderName, Tactics, Techniques, IsIncident\n",
+        "size": 0,
+        "title": "MICROSOFT SENTINEL CALDERA RELATED ALERTS",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "AlertSeverity",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": "==",
+                    "thresholdValue": "Medium",
+                    "representation": "orange",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "Low",
+                    "representation": "gray",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "High",
+                    "representation": "redBright",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "blue",
+                    "text": "{0}{1}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "customWidth": "100",
+      "name": "query - 13"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Agents_CL \n| where isnotempty(host_s)\n| extend Host = toupper(tostring(host_s))\n| join kind=inner  (\n    SecurityAlert\n| extend Entities = iff(isempty(Entities), todynamic('[{\"dummy\" : \"\"}]'), todynamic(Entities))\n| mv-expand Entities\n//| where Entities has \"HostName\"\n| extend HostEntity =  toupper(tostring(Entities.HostName))\n)\non $left.Host == $right.HostEntity\n//| where isnotempty(Host)\n| project Host, DisplayName,AlertSeverity, Description, ProviderName, Tactics, Techniques, IsIncident\n| summarize count() by AlertSeverity\n",
+        "size": 1,
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "categoricalbar",
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "Medium",
+              "color": "orange"
+            },
+            {
+              "seriesName": "Low",
+              "color": "blueDarkDark"
+            },
+            {
+              "seriesName": "High",
+              "color": "redBright"
+            }
+          ]
+        }
+      },
+      "name": "query - 15"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Abilities_CL \n| extend Ability = tostring(name_s), Description = tostring(description_s) ,MITRE_Tactic = tostring(tactic_s), MITRE_Technique = tostring(technique_name_s), TechniqueID = tostring(technique_id_s), Executors = tostring(executors_s)\n| summarize count() by Ability, Description, MITRE_Tactic, MITRE_Technique, TechniqueID, Executors\n| project-away count_",
+        "size": 0,
+        "title": "CALDERA ABILITIES",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "MITRE_Tactic",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "icons",
+                "thresholdsGrid": [
+                  {
+                    "operator": "==",
+                    "thresholdValue": "collection",
+                    "representation": "Collection",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "discovery",
+                    "representation": "Discovery",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "defense-evasion",
+                    "representation": "Defense Evasion",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "privilege-escalation",
+                    "representation": "Privilege Escalation",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "exfiltration",
+                    "representation": "Exfiltration",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "execution",
+                    "representation": "Execution",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "lateral-movement",
+                    "representation": "Lateral_Movement",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "credential-access",
+                    "representation": "Credential Access",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "impact",
+                    "representation": "Impact",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "command-and-control",
+                    "representation": "Command and Control",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "build-capabilities",
+                    "representation": "Normal",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "success",
+                    "text": "{0}{1}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "name": "query - 11"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Abilities_CL \n| extend Ability = tostring(name_s), Description = tostring(description_s) ,MITRE_Tactic = tostring(tactic_s), MITRE_Technique = tostring(technique_name_s), TechniqueID = tostring(technique_id_s), Executors = tostring(executors_s)\n| summarize count() by Ability, Description, MITRE_Tactic, MITRE_Technique, TechniqueID, Executors\n| project-away count_\n| summarize count() by MITRE_Tactic\n\n\n\n",
+        "size": 0,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "categoricalbar",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "MITRE_Tactic"
+          },
+          "subtitleContent": {
+            "columnMatch": "count_",
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "style": "decimal",
+                "useGrouping": false
+              }
+            }
+          },
+          "showBorder": true,
+          "size": "auto"
+        }
+      },
+      "name": "query - 12"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Operations_CL \n| extend Start = tostring(start_t), Obfuscator = tostring(obfuscator_s), Operation = tostring(name_s), State = tostring(state_s), Adversary = tostring(adversary_name_s)\n| summarize count() by Operation, Adversary, Obfuscator, State, Start\n| project-away count_",
+        "size": 3,
+        "title": "CALDERA OPERATIONS",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "State",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "icons",
+                "thresholdsGrid": [
+                  {
+                    "operator": "==",
+                    "thresholdValue": "running",
+                    "representation": "Start",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "finished",
+                    "representation": "Paused",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "success",
+                    "text": "{0}{1}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "customWidth": "70",
+      "name": "query - 5"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Operations_CL \n| extend Start = tostring(start_t), Obfuscator = tostring(obfuscator_s), Operation = tostring(name_s), State = tostring(state_s), Adversary = tostring(adversary_name_s)\n| summarize dcount(Operation) by State",
+        "size": 3,
+        "title": "CALDERA OPERATIONS BY STATUS",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "piechart",
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "running",
+              "label": "Running",
+              "color": "blueDark"
+            },
+            {
+              "seriesName": "finished",
+              "label": "Finished",
+              "color": "redBright"
+            }
+          ]
+        }
+      },
+      "customWidth": "30",
+      "name": "query - 6"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Obfuscators_CL \n| extend Obfuscator = tostring(name_s), Description = tostring(description_s)\n| summarize count() by Obfuscator, Description\n| project-away count_",
+        "size": 3,
+        "title": "CALDERA OBFUSCATORS",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table"
+      },
+      "customWidth": "50",
+      "name": "query - 7"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CLADERA_Planners_CL \n| extend Planner = tostring(name_s), Description = tostring(description_s), AllowRepeatbleAbilities = tostring(allow_repeatable_abilities_b)\n| summarize count() by Planner, Description,AllowRepeatbleAbilities\n| project-away count_",
+        "size": 3,
+        "title": "CALDERA PLANNERS",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "AllowRepeatbleAbilities",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "icons",
+                "thresholdsGrid": [
+                  {
+                    "operator": "==",
+                    "thresholdValue": "True",
+                    "representation": "success",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "False",
+                    "representation": "4",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "success",
+                    "text": "{0}{1}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "customWidth": "50",
+      "name": "query - 10"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Plugins_CL \n| extend Plugin = tostring(name_s), Description = tostring(description_s), Enabled = tostring(enabled_b)\n|  summarize count() by Plugin, Description, Enabled\n| project-away count_  ",
+        "size": 3,
+        "title": "CALDERA PLUGINS",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "Enabled",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "icons",
+                "thresholdsGrid": [
+                  {
+                    "operator": "==",
+                    "thresholdValue": "True",
+                    "representation": "success",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "==",
+                    "thresholdValue": "False",
+                    "representation": "4",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "success",
+                    "text": "{0}{1}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "customWidth": "70",
+      "name": "query - 7 - Copy"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "CALDERA_Plugins_CL \n| extend Plugin = tostring(name_s), Description = tostring(description_s), Enabled = tostring(enabled_b)\n| summarize dcount(Plugin) by Enabled",
+        "size": 3,
+        "title": "CALDERA PLUGINS BY STATUS",
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "piechart"
+      },
+      "customWidth": "30",
+      "name": "query - 9"
+    }
+  ],
+  "fallbackResourceIds": [
+    "/subscriptions/<SUBSCRIPTION_HERE>/resourcegroups/<RESOURCE_GROUP>/providers/microsoft.operationalinsights/workspaces/<WORKSPACE_HERE>"
+  ],
+  "fromTemplateId": "sentinel-UserWorkbook",
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}

@@ -1,0 +1,335 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Get_Abilities": {
+                "inputs": {
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "KEY": "@variables('API_KEY')",
+                        "accept": "application/json"
+                    },
+                    "method": "GET",
+                    "uri": "@{variables('CALDERA_HOST')}/api/v2/abilities"
+                },
+                "runAfter": {
+                    "Initialize_variable_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Http"
+            },
+            "Get_Adversaries": {
+                "inputs": {
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "KEY": "@variables('API_KEY')",
+                        "accept": "application/json"
+                    },
+                    "method": "GET",
+                    "uri": "@{variables('CALDERA_HOST')}/api/v2/adversaries"
+                },
+                "runAfter": {
+                    "Initialize_variable_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Http"
+            },
+            "Get_Agents": {
+                "inputs": {
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "KEY": "@variables('API_KEY')",
+                        "accept": "application/json"
+                    },
+                    "method": "GET",
+                    "uri": "@{variables('CALDERA_HOST')}/api/v2/agents"
+                },
+                "runAfter": {
+                    "Initialize_variable_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Http"
+            },
+            "Get_Obfuscators": {
+                "inputs": {
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "KEY": "@variables('API_KEY')",
+                        "accept": "application/json"
+                    },
+                    "method": "GET",
+                    "uri": "@{variables('CALDERA_HOST')}/api/v2/obfuscators"
+                },
+                "runAfter": {
+                    "Initialize_variable_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Http"
+            },
+            "Get_Operations": {
+                "inputs": {
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "KEY": "@variables('API_KEY')",
+                        "accept": "application/json"
+                    },
+                    "method": "GET",
+                    "uri": "@{variables('CALDERA_HOST')}/api/v2/operations"
+                },
+                "runAfter": {
+                    "Initialize_variable_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Http"
+            },
+            "Get_Planners": {
+                "inputs": {
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "KEY": "@variables('API_KEY')",
+                        "accept": "application/json"
+                    },
+                    "method": "GET",
+                    "uri": "@{variables('CALDERA_HOST')}/api/v2/planners"
+                },
+                "runAfter": {
+                    "Initialize_variable_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Http"
+            },
+            "Get_Plugins": {
+                "inputs": {
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "KEY": "@variables('API_KEY')",
+                        "accept": "application/json"
+                    },
+                    "method": "GET",
+                    "uri": "@{variables('CALDERA_HOST')}/api/v2/plugins"
+                },
+                "runAfter": {
+                    "Initialize_variable_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Http"
+            },
+            "Initialize_variable": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "API_KEY",
+                            "type": "string",
+                            "value": "ADMIN123"
+                        }
+                    ]
+                },
+                "runAfter": {},
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_2": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "CALDERA_HOST",
+                            "type": "string",
+                            "value": "http://20.216.174.249:8888"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Send_Data": {
+                "inputs": {
+                    "body": "@{body('Get_Adversaries')}",
+                    "headers": {
+                        "Log-Type": "CLADERA_ADVERSARIES"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/api/logs"
+                },
+                "runAfter": {
+                    "Get_Adversaries": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Send_Data_2": {
+                "inputs": {
+                    "body": "@{body('Get_Agents')}",
+                    "headers": {
+                        "Log-Type": "CALDERA_Agents"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/api/logs"
+                },
+                "runAfter": {
+                    "Get_Agents": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Send_Data_3": {
+                "inputs": {
+                    "body": "@{body('Get_Operations')}",
+                    "headers": {
+                        "Log-Type": "CALDERA_Operations"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/api/logs"
+                },
+                "runAfter": {
+                    "Get_Operations": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Send_Data_4": {
+                "inputs": {
+                    "body": "@{body('Get_Obfuscators')}",
+                    "headers": {
+                        "Log-Type": "CALDERA_Obfuscators"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/api/logs"
+                },
+                "runAfter": {
+                    "Get_Obfuscators": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Send_Data_5": {
+                "inputs": {
+                    "body": "@{body('Get_Abilities')}",
+                    "headers": {
+                        "Log-Type": "CALDERA_Abilities"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/api/logs"
+                },
+                "runAfter": {
+                    "Get_Abilities": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Send_Data_6": {
+                "inputs": {
+                    "body": "@{body('Get_Plugins')}",
+                    "headers": {
+                        "Log-Type": "CALDERA_Plugins"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/api/logs"
+                },
+                "runAfter": {
+                    "Get_Plugins": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Send_Data_7": {
+                "inputs": {
+                    "body": "@{body('Get_Planners')}",
+                    "headers": {
+                        "Log-Type": "CLADERA_Planners"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/api/logs"
+                },
+                "runAfter": {
+                    "Get_Planners": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "Recurrence": {
+                "evaluatedRecurrence": {
+                    "frequency": "Day",
+                    "interval": 1
+                },
+                "recurrence": {
+                    "frequency": "Day",
+                    "interval": 1
+                },
+                "type": "Recurrence"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "azureloganalyticsdatacollector": {
+                    "connectionId": "/subscriptions/<SUBSCRIPTION_HERE>/resourceGroups/<RESOURCE_GROUP>/providers/Microsoft.Web/connections/azureloganalyticsdatacollector",
+                    "connectionName": "azureloganalyticsdatacollector",
+                    "id": "/subscriptions/<SUBSCRIPTION_HERE>/providers/Microsoft.Web/locations/<LOCATION_HERE>/managedApis/azureloganalyticsdatacollector"
+                }
+            }
+        }
+    }
+}
