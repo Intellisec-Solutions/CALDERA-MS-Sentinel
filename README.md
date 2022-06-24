@@ -11,4 +11,4 @@ This project contains:
 
 ![](https://github.com/chihebchebbi/MS_Sentinel_CALDERA/blob/main/Images/CALDERA.gif?raw=true)
 
-Dont't forget to edit them by adding the subscription ID, resource group etc.
+
