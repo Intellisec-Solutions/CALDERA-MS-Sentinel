@@ -618,7 +618,7 @@
     }
   ],
   "fallbackResourceIds": [
-    "/subscriptions/<SUBSCRIPTION_HERE>/resourcegroups/<RESOURCE_GROUP>/providers/microsoft.operationalinsights/workspaces/<WORKSPACE_HERE>"
+    ""
   ],
   "fromTemplateId": "sentinel-UserWorkbook",
   "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
